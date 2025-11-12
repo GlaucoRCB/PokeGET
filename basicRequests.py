@@ -1,3 +1,4 @@
+from fastapi import FastAPI
 import requests
 
 #url da api
@@ -16,7 +17,7 @@ numero_de_pokemons = data['count']
 pokemons_names_types = {}
 
 # fazendo um loop para percorrer todos os pokemons e capturar os dados que queremos armazenar
-for pokemon in range (1, 3 + 1):
+for pokemon in range (1, 50 + 1):
 
     #segundo request para pegar os detalhes de cada pokémon, ou seja acessando a página especifica de cada pokemon
     response2 = requests.get(f'{url}/{pokemon}')
@@ -45,3 +46,11 @@ for pokemon in range (1, 3 + 1):
 
 # mostrando o que foi armazenado    
 print(pokemons_names_types) 
+
+app = FastAPI(
+    title="APIkemon"
+)
+
+@app.get("/pokemon-types")
+def pokemon_types():
+    return pokemons_names_types
