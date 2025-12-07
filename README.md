@@ -23,5 +23,6 @@ uvicorn basicRequests:app --reload
 
 # Como Rodar com Docker 
 no bash
-docker-compose up --build
+- docker-compose up --build
+
 
