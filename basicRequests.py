@@ -39,21 +39,18 @@ for pokemon in range(1, 30 + 1):
     # adicionando ao dicionario vazio os nomes e os tipos
     pokemons_names_types.update({name: tipos})
 
-    
-
 
 # mostrando o que foi armazenado
 print(pokemons_names_types)
 
 
-
 # Adicionando condição para adicionar apenas pokemons que forem do tiplo planta no novo dicionário
 for poke_name in pokemons_names_types:
-    #para cada tipo dentro da lista que vem cada vez que eu chamo o nome do pokemon
+    # para cada tipo dentro da lista que vem cada vez que eu chamo o nome do pokemon
     for type in pokemons_names_types[poke_name]:
         # se o tipo não estiver no novo dicionário pokemons_by_types, crie essa nova chave
         if type not in pokemons_by_types:
-            pokemons_by_types.update({type:[poke_name]})
+            pokemons_by_types.update({type: [poke_name]})
         else:
             pokemons_by_types[type].append(poke_name)
 
@@ -72,4 +69,7 @@ def pokemon_types():
 # rota para pesquisar todos os pokemons do tipo que foi passado no parametro (ex: só pokemons de fogo)
 @app.get("/pokemon-types/{tipo}")
 def pokemon_types_specific(tipo: str):
-    return {tipo:pokemons_by_types[tipo]}
+    try:
+        return {tipo: pokemons_by_types[tipo]}
+    except:
+        return {"Error": "Este Tipo não existe"}
