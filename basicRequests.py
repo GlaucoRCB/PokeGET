@@ -17,6 +17,8 @@ numero_de_pokemons = data['count']
 pokemons_names_types = {}
 # criando um dicionario vazio para armazenar os pokemons pelos tipos, filtrando apenas os pokemons do tipo especifico passado como parametro no get
 pokemons_by_types = {}
+# criando um set vazio para adicionar somente os tipos sem repeti-los
+pokemons_only_types = set()
 
 # fazendo um loop para percorrer todos os pokemons e capturar os dados que queremos armazenar
 for pokemon in range(1, 30 + 1):
@@ -36,12 +38,18 @@ for pokemon in range(1, 30 + 1):
 
         tipos.append(tipo['type']['name'])
 
+        # armazenando somente os tipos em um set sem que os tipos se repitam
+        pokemons_only_types.add(tipo['type']['name'])
+
     # adicionando ao dicionario vazio os nomes e os tipos
     pokemons_names_types.update({name: tipos})
 
+# transformando o set com apenas os tipos em uma lista
+pokemons_only_types = list(pokemons_only_types)
 
 # mostrando o que foi armazenado
 print(pokemons_names_types)
+print(pokemons_only_types)
 
 
 # Adicionando condição para adicionar apenas pokemons que forem do tiplo planta no novo dicionário
@@ -60,13 +68,30 @@ app = FastAPI(
 )
 
 
+@app.get("/version")
+def version():
+    return {
+        "names": "/pokemon-names-types",
+        "types": "/pokemon-types"
+    }
+
 # retornando na web o json de todos os pokemons que foram tratados somente nome e tipos (ex: {bulbasauro: [grass, poison], charmander: [fire])
-@app.get("/pokemon-types")
+
+
+@app.get("/pokemon-names-types")
 def pokemon_types():
     return pokemons_names_types
 
+# adicionando rota get com apenas os tipos
+
+
+@app.get("/pokemon-types")
+def types():
+    return pokemons_only_types
 
 # rota para pesquisar todos os pokemons do tipo que foi passado no parametro (ex: só pokemons de fogo)
+
+
 @app.get("/pokemon-types/{tipo}")
 def pokemon_types_specific(tipo: str):
     try:
